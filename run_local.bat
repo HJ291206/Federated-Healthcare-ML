@@ -92,7 +92,8 @@ echo   [OK] Frontend dependencies installed
 :: ----------------------------------------------------------------
 :: Step 5: Start backend
 :: ----------------------------------------------------------------
-echo [5/6] Starting FastAPI backend on port %BACKEND_PORT%...
+echo [5/6] Checking port %BACKEND_PORT% and starting FastAPI backend...
+powershell -Command "$p = Get-NetTCPConnection -LocalPort %BACKEND_PORT% -State Listen -ErrorAction SilentlyContinue; if ($p) { Write-Host '  Freeing stale process on port %BACKEND_PORT% (PID ' $p.OwningProcess ')...'; Stop-Process -Id $p.OwningProcess -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1 }"
 cd /d "%PROJECT_DIR%"
 start "MediFederate AI - Backend" cmd /c "call %VENV_DIR%\Scripts\activate.bat && python -m uvicorn api.main:app --host 127.0.0.1 --port %BACKEND_PORT% --reload"
 timeout /t 3 /nobreak >nul
