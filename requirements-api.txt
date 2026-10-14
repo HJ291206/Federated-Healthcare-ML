@@ -1,0 +1,6 @@
+# Dashboard backend (FastAPI). Install on top of requirements.txt:
+#   python -m pip install -r requirements-api.txt
+fastapi==0.135.1
+uvicorn[standard]==0.54.0
+httpx==0.28.1          # used by FastAPI's TestClient in tests/test_api.py
+shap==0.51.0           # final evaluation (ml.final_evaluation) only; the API itself does not import it

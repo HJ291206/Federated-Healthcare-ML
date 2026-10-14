@@ -1,0 +1,35 @@
+# Raw and derived healthcare data must never be committed.
+data/raw/*
+!data/raw/MANIFEST.sha256
+data/processed/
+# Trained models and split indices are derived from the raw data (tree models can memorize rows).
+models/
+*.csv.gz
+*.parquet
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dashboard/dist/
+
+# Runtime databases and generated reports
+*.db
+*.sqlite
+*.sqlite3
+results/app/*.db
+results/app/reports/*
+!results/app/reports/.gitkeep
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+

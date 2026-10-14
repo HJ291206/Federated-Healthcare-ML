@@ -1,0 +1,49 @@
+dataset,check,status,detail
+diabetes_binary_health_indicators_BRFSS2015.csv,sha256_matches_manifest,pass,19f367e3e3350768f0c144c5d73ee5b355f67a57eaaa86ca7bd8aec594d8b1d0
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,sha256_matches_manifest,pass,873128ba0264d66a8b09bb6158f21fd4bedc10459d1ed5ecad3b94167a9539b4
+diabetes_012_health_indicators_BRFSS2015.csv,sha256_matches_manifest,pass,a971809d0786d2d7d7f6070f83dfe8af9d860ea33a79e0e2701c8a49f78f9861
+online_retail.csv,sha256_matches_manifest,pass,c820e928a9cb01d05738b0c36b5033ef661eccfb82f09f2e5ce8542da73b0b99
+diabetes_binary_health_indicators_BRFSS2015.csv,shape,pass,"observed (253680, 22), expected (253680, 22)"
+diabetes_binary_health_indicators_BRFSS2015.csv,column_names_and_order,pass,22 columns as expected
+diabetes_binary_health_indicators_BRFSS2015.csv,dtypes_numeric,pass,"{""float64"": 22}"
+diabetes_binary_health_indicators_BRFSS2015.csv,all_values_integer_coded,pass,0 non-integer cells (stored as float64)
+diabetes_binary_health_indicators_BRFSS2015.csv,missing_values,pass,0 missing cells
+diabetes_binary_health_indicators_BRFSS2015.csv,target_excluded_from_features,pass,21 input features; target 'Diabetes_binary' not among them
+diabetes_binary_health_indicators_BRFSS2015.csv,feature_value_domains,pass,"binary features in {0,1}; ordinal/count features within documented ranges"
+diabetes_binary_health_indicators_BRFSS2015.csv,bmi_plausibility,info,"range [12, 98]; BMI<15: 68, BMI>60: 805, BMI>=90: 54. No documented valid range; values retained."
+diabetes_binary_health_indicators_BRFSS2015.csv,exact_duplicate_rows,info,24206 rows (9.54%) repeat an earlier row exactly. Retained: 21 coarse integer codes make identical profiles from different respondents plausible. Not removed.
+diabetes_binary_health_indicators_BRFSS2015.csv,identical_features_different_target,info,"1566 feature profiles appear with more than one target value, covering 5218 rows. Indicates irreducible label noise."
+diabetes_binary_health_indicators_BRFSS2015.csv,target_column_present,pass,Diabetes_binary
+diabetes_binary_health_indicators_BRFSS2015.csv,target_values,pass,"observed [0, 1], expected [0, 1]"
+diabetes_binary_health_indicators_BRFSS2015.csv,class_balance,info,majority:minority = 6.18:1; minority share = 13.93%; imbalanced
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,shape,info,"observed (70692, 22)"
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,column_names_and_order,pass,22 columns as expected
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,dtypes_numeric,pass,"{""float64"": 22}"
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,all_values_integer_coded,pass,0 non-integer cells (stored as float64)
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,missing_values,pass,0 missing cells
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,target_excluded_from_features,pass,21 input features; target 'Diabetes_binary' not among them
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,feature_value_domains,pass,"binary features in {0,1}; ordinal/count features within documented ranges"
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,bmi_plausibility,info,"range [12, 98]; BMI<15: 17, BMI>60: 260, BMI>=90: 17. No documented valid range; values retained."
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,exact_duplicate_rows,info,1635 rows (2.31%) repeat an earlier row exactly. Retained: 21 coarse integer codes make identical profiles from different respondents plausible. Not removed.
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,identical_features_different_target,info,"408 feature profiles appear with more than one target value, covering 1001 rows. Indicates irreducible label noise."
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,target_column_present,pass,Diabetes_binary
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,target_values,pass,"observed [0, 1], expected [0, 1]"
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,class_balance,info,majority:minority = 1.00:1; minority share = 50.00%; balanced
+diabetes_012_health_indicators_BRFSS2015.csv,shape,pass,"observed (253680, 22), expected (253680, 22)"
+diabetes_012_health_indicators_BRFSS2015.csv,column_names_and_order,pass,22 columns as expected
+diabetes_012_health_indicators_BRFSS2015.csv,dtypes_numeric,pass,"{""float64"": 22}"
+diabetes_012_health_indicators_BRFSS2015.csv,all_values_integer_coded,pass,0 non-integer cells (stored as float64)
+diabetes_012_health_indicators_BRFSS2015.csv,missing_values,pass,0 missing cells
+diabetes_012_health_indicators_BRFSS2015.csv,target_excluded_from_features,pass,21 input features; target 'Diabetes_012' not among them
+diabetes_012_health_indicators_BRFSS2015.csv,feature_value_domains,pass,"binary features in {0,1}; ordinal/count features within documented ranges"
+diabetes_012_health_indicators_BRFSS2015.csv,bmi_plausibility,info,"range [12, 98]; BMI<15: 68, BMI>60: 805, BMI>=90: 54. No documented valid range; values retained."
+diabetes_012_health_indicators_BRFSS2015.csv,exact_duplicate_rows,info,23899 rows (9.42%) repeat an earlier row exactly. Retained: 21 coarse integer codes make identical profiles from different respondents plausible. Not removed.
+diabetes_012_health_indicators_BRFSS2015.csv,identical_features_different_target,info,"1834 feature profiles appear with more than one target value, covering 6120 rows. Indicates irreducible label noise."
+diabetes_012_health_indicators_BRFSS2015.csv,target_column_present,pass,Diabetes_012
+diabetes_012_health_indicators_BRFSS2015.csv,target_values,pass,"observed [0, 1, 2], expected [0, 1, 2]"
+diabetes_012_health_indicators_BRFSS2015.csv,class_balance,info,majority:minority = 46.15:1; minority share = 1.83%; imbalanced
+online_retail.csv,excluded_from_healthcare_model,info,"Retail transactions, unrelated to health; hashed only, not loaded."
+diabetes_012_health_indicators_BRFSS2015.csv,same_respondents_as_primary,info,features identical row by row: True
+diabetes_binary_health_indicators_BRFSS2015.csv,target_definition_vs_documentation,warn,Observed: Diabetes_binary == 1 exactly when Diabetes_012 == 2 (diabetes); all 4631 prediabetes rows are labelled 0. Documentation says 1 = 'prediabetes or diabetes'. Labels are NOT changed; the observed definition is used and reported.
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,subsample_of_primary,warn,0 of 70692 rows cannot be matched to a primary row. Consistent with being a subsample of the primary file: never mix it with primary-file train/test splits (leakage).
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,target_definition_vs_documentation,warn,"35346 positives = number of Diabetes_012 == 2 rows: True; positives unmatched to diabetes rows: 0; negatives unmatched to no-diabetes rows: 684. Observed positive class = diabetes only, not 'prediabetes or diabetes'."

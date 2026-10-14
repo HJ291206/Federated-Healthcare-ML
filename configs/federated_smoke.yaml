@@ -1,0 +1,44 @@
+# Quick end-to-end check (a few minutes on CPU). Results go to results/federated/smoke/.
+output_tag: smoke
+
+data:
+  file: diabetes_binary_health_indicators_BRFSS2015.csv
+  test_size: 0.15
+  val_size: 0.15
+  split_seed: 42
+
+seeds: [0]
+num_clients: 5
+partition_seed: 42
+partitions:
+  - {method: iid}
+  - {method: dirichlet, alpha: 0.5, min_train_per_class: 20, min_val_per_class: 5}
+
+model:
+  hidden_sizes: [64, 32]
+  dropout: 0.1
+
+federated:
+  rounds: 3
+  local_epochs: 1
+  lr: 0.05
+  batch_size: 64
+  momentum: 0.0
+  weight_decay: 0.0
+  client_fraction: 1.0
+  fedprox_mu: [0.01]
+
+# Recipe for the centralized and local-only reference MLPs (same as configs/centralized.yaml).
+reference_training:
+  lr: 0.001
+  weight_decay: 0.0001
+  batch_size: 512
+  max_epochs: 5
+  patience: 3
+  torch_threads: 4
+
+run_local_only: true
+threshold:
+  recall_target: 0.80
+target_tolerance: 0.005
+torch_threads: 4

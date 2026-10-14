@@ -1,0 +1,42 @@
+{
+  "disclaimer": "Clients are simulated partitions of a single public survey dataset (CDC BRFSS 2015). They are not hospitals or real institutions, and federated learning alone does not guarantee privacy: model updates can still leak information about training data.",
+  "config": {
+    "data": {
+      "file": "diabetes_binary_health_indicators_BRFSS2015.csv",
+      "test_size": 0.15,
+      "val_size": 0.15,
+      "split_seed": 42
+    },
+    "seed": 0,
+    "num_clients": 5,
+    "partition_seed": 42,
+    "partition": {
+      "method": "iid"
+    },
+    "model": {
+      "hidden_sizes": [
+        64,
+        32
+      ],
+      "dropout": 0.1
+    },
+    "federated": {
+      "rounds": 4,
+      "local_epochs": 1,
+      "lr": 0.05,
+      "batch_size": 64,
+      "fedprox_mu": [
+        0.01
+      ]
+    },
+    "sequential_threads": 4,
+    "ray_num_cpus": 5,
+    "ray_actor_threads": 1
+  },
+  "ray": "2.59.0",
+  "torch": "2.10.0+cpu",
+  "ray_startup_seconds": 3.2336869002319872,
+  "cpu_count": 12,
+  "platform": "Windows-10-10.0.26200-SP0",
+  "finished_at": "2026-10-15 02:52:50 +0530"
+}

@@ -1,0 +1,9 @@
+partition,method,train_seconds,rounds,total_bytes,rounds_to_target,bytes_to_target
+iid,centralized,3.056851400062442,0.0,0.0,,
+iid,local_only (sum of clients),3.0652586999349296,0.0,0.0,,
+iid,fedavg,5.239707199856639,3.0,422520.0,2.0,281680.0
+iid,fedprox_mu0.01,8.330911200027913,3.0,422520.0,2.0,281680.0
+dirichlet_a0.5,centralized,3.056851400062442,0.0,0.0,,
+dirichlet_a0.5,local_only (sum of clients),3.0752832014113665,0.0,0.0,,
+dirichlet_a0.5,fedavg,5.466029599774629,3.0,422520.0,2.0,281680.0
+dirichlet_a0.5,fedprox_mu0.01,8.74724890012294,3.0,422520.0,2.0,281680.0

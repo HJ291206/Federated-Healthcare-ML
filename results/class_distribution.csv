@@ -1,0 +1,8 @@
+dataset,target_column,class,meaning_observed,count,share
+diabetes_binary_health_indicators_BRFSS2015.csv,Diabetes_binary,0,no diabetes (includes prediabetes),218334,0.860667
+diabetes_binary_health_indicators_BRFSS2015.csv,Diabetes_binary,1,diabetes,35346,0.139333
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,Diabetes_binary,0,no diabetes (includes prediabetes),35346,0.5
+diabetes_binary_5050split_health_indicators_BRFSS2015.csv,Diabetes_binary,1,diabetes,35346,0.5
+diabetes_012_health_indicators_BRFSS2015.csv,Diabetes_012,0,no diabetes or only during pregnancy,213703,0.842412
+diabetes_012_health_indicators_BRFSS2015.csv,Diabetes_012,1,prediabetes,4631,0.018255
+diabetes_012_health_indicators_BRFSS2015.csv,Diabetes_012,2,diabetes,35346,0.139333

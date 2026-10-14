@@ -1,0 +1,26 @@
+# Sequential vs Ray execution of the same workload. Results go to results/federated/ray/.
+data:
+  file: diabetes_binary_health_indicators_BRFSS2015.csv
+  test_size: 0.15
+  val_size: 0.15
+  split_seed: 42
+
+seed: 0
+num_clients: 5
+partition_seed: 42
+partition: {method: iid}
+
+model:
+  hidden_sizes: [64, 32]
+  dropout: 0.1
+
+federated:
+  rounds: 4
+  local_epochs: 1
+  lr: 0.05
+  batch_size: 64            # small batches = many steps per client, where parallelism matters
+  fedprox_mu: [0.01]
+
+sequential_threads: 4       # torch threads used by the sequential backend
+ray_num_cpus: 5             # local CPU mode: one Ray worker per client
+ray_actor_threads: 1        # torch threads inside each actor

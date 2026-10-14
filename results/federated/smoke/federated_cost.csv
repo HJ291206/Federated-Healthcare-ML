@@ -1,0 +1,17 @@
+partition,seed,method,train_seconds,rounds,total_bytes,rounds_to_target,bytes_to_target,bytes_down,bytes_up
+iid,0,centralized,3.056851400062442,0,0,,,,
+iid,0,local_only_client0,0.6003819000907242,0,0,,,,
+iid,0,local_only_client1,0.6454452001489699,0,0,,,,
+iid,0,local_only_client2,0.5952562997117639,0,0,,,,
+iid,0,local_only_client3,0.6124996999278665,0,0,,,,
+iid,0,local_only_client4,0.6116756000556052,0,0,,,,
+iid,0,fedavg,5.239707199856639,3,422520,2.0,281680.0,211260.0,211260.0
+iid,0,fedprox_mu0.01,8.330911200027913,3,422520,2.0,281680.0,211260.0,211260.0
+dirichlet_a0.5,0,centralized,3.056851400062442,0,0,,,,
+dirichlet_a0.5,0,local_only_client0,0.7665131003595889,0,0,,,,
+dirichlet_a0.5,0,local_only_client1,1.2535640001296997,0,0,,,,
+dirichlet_a0.5,0,local_only_client2,0.07454430032521486,0,0,,,,
+dirichlet_a0.5,0,local_only_client3,0.8435197002254426,0,0,,,,
+dirichlet_a0.5,0,local_only_client4,0.13714210037142038,0,0,,,,
+dirichlet_a0.5,0,fedavg,5.466029599774629,3,422520,2.0,281680.0,211260.0,211260.0
+dirichlet_a0.5,0,fedprox_mu0.01,8.74724890012294,3,422520,2.0,281680.0,211260.0,211260.0

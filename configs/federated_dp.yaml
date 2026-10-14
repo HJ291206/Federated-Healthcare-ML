@@ -1,0 +1,45 @@
+# Optional differential-privacy experiment (example-level DP-SGD on each client via Opacus).
+# Results go to results/federated/dp/. The basic pipeline (configs/federated*.yaml) does not use this.
+output_tag: dp
+
+data:
+  file: diabetes_binary_health_indicators_BRFSS2015.csv
+  test_size: 0.15
+  val_size: 0.15
+  split_seed: 42
+
+seeds: [0]
+num_clients: 5
+partition_seed: 42
+partitions:
+  - {method: iid}
+  - {method: dirichlet, alpha: 0.5, min_train_per_class: 20, min_val_per_class: 5}
+
+model:
+  hidden_sizes: [64, 32]
+  dropout: 0.1
+
+federated:
+  rounds: 8
+  local_epochs: 1
+  lr: 0.1
+  batch_size: 2048
+  momentum: 0.0
+  weight_decay: 0.0
+  client_fraction: 1.0
+  fedprox_mu: [0.01]
+
+privacy:
+  max_grad_norm: 1.0          # per-example L2 clipping norm C
+  delta: 1.0e-5               # fixed delta; smaller than 1/n for every client
+  accountant: rdp
+  poisson_sampling: true
+  noise_multipliers: [1.0, 4.0]   # sigma; the non-private run (no clipping, no noise) is always included
+  # DP-specific client learning rate. Clipping to C=1 shrinks gradients far below their raw norms, so the
+  # non-private lr (0.1) under-trains. Chosen from {0.1, 0.5, 2.0} by VALIDATION ROC-AUC on the IID partition
+  # (0.7296 / 0.8042 / 0.8222 at sigma=1); the test set was not used. Tuning cost is not charged to epsilon.
+  lr: 2.0
+
+threshold:
+  recall_target: 0.80
+torch_threads: 8

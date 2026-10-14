@@ -1,0 +1,22 @@
+model_a,model_b,spearman_rho
+centralized_logistic_regression,centralized_random_forest,0.864935064935065
+centralized_logistic_regression,centralized_mlp,0.9285714285714285
+centralized_logistic_regression,dirichlet_a0.5_fedavg,0.7402597402597402
+centralized_logistic_regression,dirichlet_a0.5_fedprox_mu0.01,0.7389610389610389
+centralized_logistic_regression,iid_fedavg,0.751948051948052
+centralized_random_forest,centralized_mlp,0.8870129870129868
+centralized_random_forest,dirichlet_a0.5_fedavg,0.7662337662337663
+centralized_random_forest,dirichlet_a0.5_fedprox_mu0.01,0.7688311688311688
+centralized_random_forest,iid_fedavg,0.7831168831168831
+centralized_mlp,dirichlet_a0.5_fedavg,0.7571428571428571
+centralized_mlp,dirichlet_a0.5_fedprox_mu0.01,0.7584415584415585
+centralized_mlp,iid_fedavg,0.7792207792207791
+dirichlet_a0.5_fedavg,dirichlet_a0.5_fedprox_mu0.01,0.9987012987012988
+dirichlet_a0.5_fedavg,iid_fedavg,0.9857142857142858
+dirichlet_a0.5_fedprox_mu0.01,iid_fedavg,0.9844155844155844
+centralized_logistic_regression,centralized_logistic_regression (permutation importance),0.9493506493506494
+centralized_random_forest,centralized_random_forest (permutation importance),0.7727272727272727
+centralized_mlp,centralized_mlp (permutation importance),0.890909090909091
+dirichlet_a0.5_fedavg,dirichlet_a0.5_fedavg (permutation importance),0.7636363636363636
+dirichlet_a0.5_fedprox_mu0.01,dirichlet_a0.5_fedprox_mu0.01 (permutation importance),0.7597402597402596
+iid_fedavg,iid_fedavg (permutation importance),0.7376623376623377

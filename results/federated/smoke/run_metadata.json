@@ -1,0 +1,168 @@
+{
+  "disclaimer": "Clients are simulated partitions of a single public survey dataset (CDC BRFSS 2015). They are not hospitals or real institutions, and federated learning alone does not guarantee privacy: model updates can still leak information about training data.",
+  "config_file": "configs/federated_smoke.yaml",
+  "config": {
+    "output_tag": "smoke",
+    "data": {
+      "file": "diabetes_binary_health_indicators_BRFSS2015.csv",
+      "test_size": 0.15,
+      "val_size": 0.15,
+      "split_seed": 42
+    },
+    "seeds": [
+      0
+    ],
+    "num_clients": 5,
+    "partition_seed": 42,
+    "partitions": [
+      {
+        "method": "iid"
+      },
+      {
+        "method": "dirichlet",
+        "alpha": 0.5,
+        "min_train_per_class": 20,
+        "min_val_per_class": 5
+      }
+    ],
+    "model": {
+      "hidden_sizes": [
+        64,
+        32
+      ],
+      "dropout": 0.1
+    },
+    "federated": {
+      "rounds": 3,
+      "local_epochs": 1,
+      "lr": 0.05,
+      "batch_size": 64,
+      "momentum": 0.0,
+      "weight_decay": 0.0,
+      "client_fraction": 1.0,
+      "fedprox_mu": [
+        0.01
+      ]
+    },
+    "reference_training": {
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "batch_size": 512,
+      "max_epochs": 5,
+      "patience": 3,
+      "torch_threads": 4
+    },
+    "run_local_only": true,
+    "threshold": {
+      "recall_target": 0.8
+    },
+    "target_tolerance": 0.005,
+    "torch_threads": 4
+  },
+  "data_file": "diabetes_binary_health_indicators_BRFSS2015.csv",
+  "data_sha256": "19f367e3e3350768f0c144c5d73ee5b355f67a57eaaa86ca7bd8aec594d8b1d0",
+  "split_seed": 42,
+  "split_sizes": {
+    "train": 177576,
+    "val": 38052,
+    "test": 38052
+  },
+  "seeds": [
+    0
+  ],
+  "partition_seed": 42,
+  "num_clients": 5,
+  "partitions": {
+    "iid": {
+      "num_clients": 5,
+      "seed": 42,
+      "draws": 1,
+      "proportions": [
+        [
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    "dirichlet_a0.5": {
+      "num_clients": 5,
+      "alpha": 0.5,
+      "seed": 42,
+      "min_train_per_class": 20,
+      "min_val_per_class": 5,
+      "draws": 1,
+      "proportions": [
+        [
+          0.280718,
+          0.050774
+        ],
+        [
+          0.446738,
+          0.165601
+        ],
+        [
+          0.003095,
+          0.114902
+        ],
+        [
+          0.263723,
+          0.393675
+        ],
+        [
+          0.005727,
+          0.275047
+        ]
+      ]
+    }
+  },
+  "federated": {
+    "rounds": 3,
+    "local_epochs": 1,
+    "lr": 0.05,
+    "batch_size": 64,
+    "momentum": 0.0,
+    "weight_decay": 0.0,
+    "client_fraction": 1.0,
+    "fedprox_mu": [
+      0.01
+    ]
+  },
+  "model": {
+    "hidden_sizes": [
+      64,
+      32
+    ],
+    "dropout": 0.1
+  },
+  "model_parameters": 3521,
+  "model_bytes": 14084,
+  "target_tolerance": 0.005,
+  "runtime_seconds_total": 42.79763100016862,
+  "environment": {
+    "python": "3.11.8",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "cpu_count": 12,
+    "torch": "2.10.0+cpu",
+    "torch_threads": 4,
+    "cuda_used": false,
+    "sklearn": "1.8.0",
+    "numpy": "2.4.3"
+  },
+  "finished_at": "2026-10-15 01:14:12 +0530"
+}

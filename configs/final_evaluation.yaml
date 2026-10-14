@@ -1,0 +1,25 @@
+# Final evaluation and explainability. Reads saved outputs only; re-scores saved models for CIs and SHAP.
+data:
+  file: diabetes_binary_health_indicators_BRFSS2015.csv
+  test_size: 0.15
+  val_size: 0.15
+  split_seed: 42
+
+federated_tags: [final]         # first existing tag is used for saved federated models; listed tags are concatenated
+dp_tag: dp                      # DP rows are included only if results/federated/<dp_tag>/dp_results.csv exists
+operating_point: val_max_f1     # threshold chosen on validation; metrics reported on test
+confusion_methods: [centralized_mlp, fedavg, fedprox_mu0.01, fedavg_dp_sigma1]
+
+n_bootstrap: 500
+bootstrap_seed: 0
+
+explain:
+  models: [centralized_logistic_regression, centralized_random_forest, centralized_mlp, iid_fedavg, dirichlet_a0.5_fedavg, dirichlet_a0.5_fedprox_mu0.01]
+  n_background: 100
+  n_explain: 400
+  max_evals: 215            # Permutation explainer: 5 forward/backward permutations of 21 features
+  n_permutation_rows: 10000
+  permutation_repeats: 5
+  seed: 0
+
+torch_threads: 4

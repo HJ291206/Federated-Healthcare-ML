@@ -1,0 +1,11 @@
+# Optional extras, verified to co-install with requirements.txt (torch 2.10.0 CPU, numpy 2.4.3) on
+# Python 3.11 / Windows via `pip install --dry-run` before installation. Install only what you need:
+#   python -m pip install -r requirements-optional.txt
+# JAX 1D-CNN experiment (CPU; for CUDA on Linux use `pip install "jax[cuda12]"` instead of jax)
+jax==0.10.2
+flax==0.12.8
+optax==0.2.8
+# Ray execution backend (local CPU mode works without a cluster)
+ray==2.59.0
+# Differential-privacy experiment
+opacus==1.6.0

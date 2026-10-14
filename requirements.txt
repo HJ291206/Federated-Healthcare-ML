@@ -1,0 +1,14 @@
+# Install the CPU build of torch first (no CUDA needed):
+#   python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+# then:
+#   python -m pip install -r requirements.txt
+numpy==2.4.3
+pandas==3.0.1
+matplotlib==3.10.8
+scikit-learn==1.8.0
+scipy==1.17.1
+joblib==1.6.0
+pyyaml==6.0.3
+torch==2.10.0
+pytest==9.1.1
+opacus==1.6.0  # optional (also listed in requirements-optional.txt with JAX and Ray): differential-privacy experiment only

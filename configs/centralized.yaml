@@ -1,0 +1,41 @@
+# Centralized baseline pipeline. All selection uses the validation split only.
+data:
+  file: diabetes_binary_health_indicators_BRFSS2015.csv
+  test_size: 0.15
+  val_size: 0.15
+  split_seed: 42
+
+# Model-training seeds. The split is fixed by data.split_seed so every seed sees the same test set.
+seeds: [0, 1, 2]
+
+threshold:
+  # Operating points are chosen on validation predictions, then frozen for the test set.
+  recall_target: 0.80
+
+selection_metric: roc_auc
+
+logistic_regression:
+  C_grid: [0.001, 0.01, 0.1, 1.0, 10.0]
+  max_iter: 2000
+
+random_forest:
+  n_estimators: 200
+  max_features: sqrt
+  n_jobs: -1
+  grid:
+    - {max_depth: 12, min_samples_leaf: 5}
+    - {max_depth: 12, min_samples_leaf: 20}
+    - {max_depth: 20, min_samples_leaf: 5}
+    - {max_depth: 20, min_samples_leaf: 20}
+    - {max_depth: 20, min_samples_leaf: 50}
+    - {max_depth: null, min_samples_leaf: 50}
+
+mlp:
+  hidden_sizes: [64, 32]
+  dropout: 0.1
+  lr: 0.001
+  weight_decay: 0.0001
+  batch_size: 512
+  max_epochs: 60
+  patience: 6
+  torch_threads: 4

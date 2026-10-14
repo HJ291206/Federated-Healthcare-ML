@@ -1,0 +1,12 @@
+model,params,val_roc_auc,fit_seconds,seed,selected
+logistic_regression,"{""C"": 0.001}",0.8241673284746358,0.291907399892807,0,False
+logistic_regression,"{""C"": 0.01}",0.8252369003775041,0.34705170011147857,0,False
+logistic_regression,"{""C"": 0.1}",0.8253539813580357,0.38714190013706684,0,False
+logistic_regression,"{""C"": 1.0}",0.8253644109525139,0.3561599999666214,0,False
+logistic_regression,"{""C"": 10.0}",0.82536574704634,0.37300030002370477,0,True
+random_forest,"{""max_depth"": 12, ""min_samples_leaf"": 5}",0.830656626766221,14.66180430026725,0,False
+random_forest,"{""max_depth"": 12, ""min_samples_leaf"": 20}",0.8308616998914424,20.890072400216013,0,False
+random_forest,"{""max_depth"": 20, ""min_samples_leaf"": 5}",0.8283313570278823,22.28751129982993,0,False
+random_forest,"{""max_depth"": 20, ""min_samples_leaf"": 20}",0.831306837978467,20.256875100079924,0,True
+random_forest,"{""max_depth"": 20, ""min_samples_leaf"": 50}",0.830693680333793,19.46491129975766,0,False
+random_forest,"{""max_depth"": null, ""min_samples_leaf"": 50}",0.830632657703704,21.57865019980818,0,False
