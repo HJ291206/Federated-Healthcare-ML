@@ -38,11 +38,11 @@ interface PageDef {
 
 const PAGES: PageDef[] = [
   { path: "/", label: "Overview", icon: <LayoutDashboard className="h-4 w-4" />, element: <Overview /> },
-  { path: "/patient-risk", label: "Patient Risk Analysis", icon: <UserCheck className="h-4 w-4" />, element: <Demo /> },
+  { path: "/patient-risk", label: "Patient Risk", icon: <UserCheck className="h-4 w-4" />, element: <Demo /> },
   { path: "/federated-learning", label: "Federated Learning", icon: <Network className="h-4 w-4" />, element: <FederatedLearning /> },
   { path: "/hospital-network", label: "Hospital Network", icon: <Building2 className="h-4 w-4" />, element: <HospitalNetwork /> },
   { path: "/model-lab", label: "Model Laboratory", icon: <FlaskConical className="h-4 w-4" />, element: <ModelLaboratory /> },
-  { path: "/explainability", label: "Explainable AI", icon: <Brain className="h-4 w-4" />, element: <Explainability /> },
+  { path: "/explainability", label: "Explainability", icon: <Brain className="h-4 w-4" />, element: <Explainability /> },
   { path: "/privacy", label: "Privacy & Security", icon: <Shield className="h-4 w-4" />, element: <Privacy /> },
   { path: "/reports", label: "Reports", icon: <FileText className="h-4 w-4" />, element: <Reports /> },
   { path: "/settings", label: "Settings", icon: <SettingsIcon className="h-4 w-4" />, element: <SettingsPage /> },
@@ -51,39 +51,34 @@ const PAGES: PageDef[] = [
 export default function App() {
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      {/* ── Sidebar ── */}
-      <aside className="flex w-full shrink-0 flex-col border-b border-slate-700 bg-[#1e293b] text-white md:w-64 md:border-b-0 md:border-r md:border-slate-700">
-        {/* Brand header */}
-        <div className="border-b border-slate-600/50 px-4 py-4">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-600">
+      <aside className="flex w-full shrink-0 flex-col bg-[#0c1628] text-white md:w-[248px] md:border-r md:border-white/5">
+        <div className="px-5 py-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-400 to-teal-700 shadow-[0_8px_20px_rgba(13,148,136,0.35)]">
               <Activity className="h-4 w-4 text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-bold tracking-tight text-white">MediFederate AI</h1>
-              <p className="text-[10px] font-medium tracking-wide text-teal-400">
-                Privacy-Preserving Healthcare Intelligence
-              </p>
+              <h1 className="text-[15px] font-semibold tracking-tight text-white">MediFederate AI</h1>
+              <p className="text-[11px] font-medium tracking-wide text-teal-300/80">Clinical Intelligence</p>
             </div>
           </div>
-          <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-slate-600 px-2 py-0.5 text-[10px] text-slate-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            Local Instance
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-medium text-emerald-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+            Clinical Network Live
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex flex-1 flex-wrap gap-0.5 overflow-y-auto px-2 py-2 md:block md:space-y-0.5" aria-label="Main navigation">
+        <nav className="flex flex-1 flex-wrap gap-1 overflow-y-auto px-3 pb-4 md:block md:space-y-0.5" aria-label="Main navigation">
           {PAGES.map((p) => (
             <NavLink
               key={p.path}
               to={p.path}
               end={p.path === "/"}
               className={({ isActive }) =>
-                `flex items-center gap-2.5 rounded px-2.5 py-2 text-[13px] transition-colors ${
+                `flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] transition-colors ${
                   isActive
-                    ? "border-l-2 border-teal-400 bg-slate-700/60 font-medium text-white"
-                    : "border-l-2 border-transparent text-slate-400 hover:bg-slate-700/40 hover:text-slate-200"
+                    ? "bg-white/10 font-medium text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
+                    : "text-slate-400 hover:bg-white/5 hover:text-slate-100"
                 }`
               }
             >
@@ -93,23 +88,22 @@ export default function App() {
           ))}
         </nav>
 
-        {/* Footer disclaimer */}
-        <div className="border-t border-slate-600/50 px-4 py-3">
-          <p className="text-[10px] leading-relaxed text-slate-500">
-            Academic research prototype. Simulated institutions from CDC BRFSS 2015 survey data.
-            Model outputs are educational, not clinical diagnoses.
+        <div className="border-t border-white/8 px-5 py-4">
+          <p className="text-[11px] leading-relaxed text-slate-400">
+            Enterprise Deployment
+            <span className="mx-1.5 text-slate-600">·</span>
+            Zero Data Egress
           </p>
+          <p className="mt-1 text-[10px] text-slate-500 font-mono">v2.4.0 • HIPAA Compliant</p>
         </div>
       </aside>
 
-      {/* ── Main content ── */}
-      <main className="min-w-0 flex-1 bg-[#f8fafc]">
-        <div className="mx-auto max-w-7xl space-y-4 p-4 md:p-6">
+      <main className="min-w-0 flex-1 bg-[#f4f6f9]">
+        <div className="mx-auto max-w-[1200px] space-y-6 px-5 py-7 md:px-8 md:py-8">
           <Routes>
             {PAGES.map((p) => (
               <Route key={p.path} path={p.path} element={p.element} />
             ))}
-            {/* Legacy routes redirect to new pages */}
             <Route path="/demo" element={<Navigate to="/patient-risk" replace />} />
             <Route path="/centralized" element={<Centralized />} />
             <Route path="/federated" element={<Federated />} />

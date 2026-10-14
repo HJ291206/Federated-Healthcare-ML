@@ -4,11 +4,8 @@ import {
   Building2,
   CheckCircle2,
   Clock,
-  Layers,
-  Network,
   Play,
   RotateCcw,
-  Sliders,
   StopCircle,
   Trash2,
 } from "lucide-react";
@@ -24,7 +21,7 @@ import {
 import type { CreateExperimentInput } from "../api";
 import { bytesHuman, fmt, pct } from "../format";
 import { useExperiments } from "../hooks";
-import { Card, EmptyState, ErrorState, Notice, StatusBadge } from "../components/ui";
+import { Card, EmptyState, ErrorState, PageHeader, StatusBadge } from "../components/ui";
 
 export default function FederatedLearning() {
   const { experiments, loading, error, create, cancel, remove, refresh } = useExperiments();
@@ -101,45 +98,23 @@ export default function FederatedLearning() {
 
   return (
     <div className="space-y-6">
-      <header className="flex flex-col gap-1 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <Network className="h-6 w-6 text-teal-600" />
-            Federated Learning Control Center
-          </h1>
-          <p className="text-xs text-slate-500">
-            Configure, launch, and monitor privacy-preserving decentralized model training runs across simulated institutional clients.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => refresh()}
-            className="btn-secondary text-xs px-2.5 py-1.5"
-            title="Refresh status"
-          >
-            <RotateCcw className="h-3.5 w-3.5 text-slate-500" />
+      <PageHeader
+        title="Federated learning"
+        description="Configure a run, train across sites, and watch global metrics converge — without moving patient records."
+        actions={
+          <button onClick={() => refresh()} className="btn-secondary" title="Refresh status">
+            <RotateCcw className="h-4 w-4 text-slate-500" />
             Refresh
           </button>
-        </div>
-      </header>
-
-      <Notice variant="info">
-        <span className="font-semibold text-slate-900">Decentralized Execution:</span> All training operates with simulated clients partitioned from CDC BRFSS 2015. Data never leaves client local memory. Only parameter updates (3,521 float32 weights) are shared with the aggregator.
-      </Notice>
+        }
+      />
 
       {/* Main Grid: Experiment Configuration on left, Live Active Monitor on right */}
       <div className="grid gap-6 lg:grid-cols-12">
         {/* Left Column: Configuration Form (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
-          <Card
-            title={
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                <Sliders className="h-4 w-4 text-teal-600" />
-                Configure New Run
-              </div>
-            }
-          >
-            <form onSubmit={handleStart} className="space-y-3.5 text-xs">
+          <Card title="New experiment">
+            <form onSubmit={handleStart} className="space-y-4 text-sm">
               {submitError && (
                 <div className="rounded border border-rose-300 bg-rose-50 p-2.5 text-rose-900">
                   {submitError}
@@ -168,8 +143,8 @@ export default function FederatedLearning() {
                     value={algorithm}
                     onChange={(e) => setAlgorithm(e.target.value as "fedavg" | "fedprox")}
                   >
-                    <option value="fedavg">FedAvg (McMahan et al.)</option>
-                    <option value="fedprox">FedProx (Li et al.)</option>
+                    <option value="fedavg">FedAvg</option>
+                    <option value="fedprox">FedProx</option>
                   </select>
                 </div>
                 <div>
@@ -210,7 +185,7 @@ export default function FederatedLearning() {
               {/* Number of Clients Slider */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="font-semibold text-slate-700">Number of Simulated Clients</label>
+                  <label className="font-semibold text-slate-700">Participating sites</label>
                   <span className="badge-neutral font-bold">{numClients} Nodes</span>
                 </div>
                 <input
@@ -299,7 +274,7 @@ export default function FederatedLearning() {
                 <button
                   type="submit"
                   disabled={isSubmitting || Boolean(runningExp)}
-                  className="btn-teal w-full py-2 font-semibold shadow-xs"
+                  className="btn-teal h-10 w-full font-semibold"
                 >
                   <Play className="h-4 w-4" />
                   {runningExp ? "Experiment Already Running…" : isSubmitting ? "Initializing…" : "Start Experiment"}
@@ -430,7 +405,7 @@ export default function FederatedLearning() {
               <div>
                 <h3 className="text-xs font-semibold text-slate-700 mb-2 flex items-center gap-1.5">
                   <Building2 className="h-3.5 w-3.5 text-slate-500" />
-                  Participating Simulated Client Nodes ({activeExp.progress.clients.length})
+                  Participating sites ({activeExp.progress.clients.length})
                 </h3>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {activeExp.progress.clients.map((c) => (
@@ -474,8 +449,8 @@ export default function FederatedLearning() {
             </Card>
           ) : (
             <EmptyState
-              title="No Active Experiment Selected"
-              message="Configure parameters and launch an experiment, or select a previous run from the history table below to view detailed round telemetry."
+              title="No experiment selected"
+              message="Configure a run on the left, or choose a previous experiment from the history table."
             />
           )}
         </div>
@@ -483,21 +458,14 @@ export default function FederatedLearning() {
 
       {/* Experiment History Table */}
       <Card
-        title={
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-              <Layers className="h-4 w-4 text-slate-500" />
-              Experiment Execution History ({experiments.length})
-            </div>
-          </div>
-        }
+              title={`Experiment history (${experiments.length})`}
       >
         {loading ? (
           <p className="text-xs text-slate-500 py-4 text-center">Loading past runs…</p>
         ) : error ? (
           <ErrorState message={error} />
         ) : experiments.length === 0 ? (
-          <EmptyState message="No federated experiments have been executed yet." />
+          <EmptyState title="No runs yet" message="Start an experiment to populate this history." />
         ) : (
           <div className="overflow-x-auto">
             <table className="table text-xs">

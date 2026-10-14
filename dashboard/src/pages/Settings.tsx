@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
 import {
   Check,
-  Database,
-  HardDrive,
-  Info,
   RotateCcw,
   Save,
-  Server,
-  Settings as SettingsIcon,
-  Sliders,
 } from "lucide-react";
 import { api, type Health, type SystemSettings } from "../api";
 import { bytesHuman } from "../format";
-import { Card, ErrorState, Loading } from "../components/ui";
+import { Card, ErrorState, Loading, PageHeader } from "../components/ui";
 
 export default function Settings() {
   const [settings, setSettings] = useState<SystemSettings | null>(null);
@@ -96,43 +90,29 @@ export default function Settings() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <header className="flex flex-col gap-1 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <SettingsIcon className="h-6 w-6 text-teal-600" />
-            Platform Configuration & System Health
-          </h1>
-          <p className="text-xs text-slate-500">
-            Hardware acceleration, default experiment hyperparameters, dataset paths, and backend connectivity diagnostics.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button onClick={loadData} className="btn-secondary text-xs px-2.5 py-1.5" title="Refresh">
-            <RotateCcw className="h-3.5 w-3.5 text-slate-500" />
+      <PageHeader
+        title="Settings"
+        description="Defaults for new experiments, compute device, and platform health."
+        actions={
+          <button onClick={loadData} className="btn-secondary" title="Refresh">
+            <RotateCcw className="h-4 w-4 text-slate-500" />
             Refresh
           </button>
-        </div>
-      </header>
+        }
+      />
 
       {savedSuccess && (
-        <div className="rounded border border-emerald-300 bg-emerald-50 p-3 text-xs text-emerald-900 flex items-center gap-2">
+        <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
           <Check className="h-4 w-4 text-emerald-600" />
-          System settings updated successfully.
+          Settings saved.
         </div>
       )}
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Left: Experiment Defaults Form */}
         <div className="space-y-6">
-          <Card
-            title={
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                <Sliders className="h-4 w-4 text-teal-600" />
-                Default Experiment Hyperparameters
-              </div>
-            }
-          >
-            <form onSubmit={handleSave} className="space-y-4 text-xs">
+          <Card title="Experiment defaults">
+            <form onSubmit={handleSave} className="space-y-4 text-sm">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-semibold text-slate-700 mb-1">Default Algorithm</label>
@@ -141,8 +121,8 @@ export default function Settings() {
                     value={defaultAlgorithm}
                     onChange={(e) => setDefaultAlgorithm(e.target.value as "fedavg" | "fedprox")}
                   >
-                    <option value="fedavg">FedAvg (Coordinate Mean)</option>
-                    <option value="fedprox">FedProx (Proximal Regularization)</option>
+                    <option value="fedavg">FedAvg</option>
+                    <option value="fedprox">FedProx</option>
                   </select>
                 </div>
                 <div>
@@ -152,9 +132,9 @@ export default function Settings() {
                     value={device}
                     onChange={(e) => setDevice(e.target.value as "cpu" | "cuda" | "mps")}
                   >
-                    <option value="cpu">CPU (Standard PyTorch)</option>
-                    <option value="cuda">CUDA (NVIDIA Acceleration)</option>
-                    <option value="mps">MPS (Apple Silicon)</option>
+                    <option value="cpu">CPU</option>
+                    <option value="cuda">CUDA</option>
+                    <option value="mps">Apple Silicon (MPS)</option>
                   </select>
                 </div>
               </div>
@@ -172,7 +152,7 @@ export default function Settings() {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Simulated Clients</label>
+                  <label className="mb-1 block font-medium text-slate-700">Sites</label>
                   <input
                     type="number"
                     min="2"
@@ -222,24 +202,17 @@ export default function Settings() {
           </Card>
 
           {/* Dataset Configuration */}
-          <Card
-            title={
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                <Database className="h-4 w-4 text-slate-500" />
-                Dataset Repository & Ground Truth
-              </div>
-            }
-          >
-            <div className="space-y-3 text-xs">
+          <Card title="Dataset">
+            <div className="space-y-4 text-sm">
               <div>
                 <p className="font-semibold text-slate-700">Source Dataset</p>
-                <p className="text-slate-500 font-mono text-[11px] mt-0.5">
+                <p className="mt-0.5 font-mono text-xs text-slate-500">
                   {settings?.dataset_name || "CDC Behavioral Risk Factor Surveillance System (BRFSS) 2015"}
                 </p>
               </div>
               <div>
                 <p className="font-semibold text-slate-700">File Path on Disk</p>
-                <p className="rounded bg-slate-100 p-1.5 font-mono text-[11px] text-slate-800 break-all select-all mt-0.5">
+                <p className="mt-1 break-all rounded-lg bg-slate-50 px-2.5 py-2 font-mono text-xs text-slate-800 select-all">
                   {settings?.dataset_path || "data/raw/diabetes_binary_health_indicators_BRFSS2015.csv"}
                 </p>
               </div>
@@ -263,37 +236,31 @@ export default function Settings() {
         <div className="space-y-6">
           {/* Backend Diagnostics */}
           <Card
-            title={
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                  <Server className="h-4 w-4 text-teal-600" />
-                  FastAPI Backend Health Probe
-                </div>
-                <span className="badge-success">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
-                  {health?.status === "ok" ? "Connected" : "Unknown"}
-                </span>
-              </div>
+            title="Platform health"
+            actions={
+              <span className="badge-success">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+                {health?.status === "ok" ? "Connected" : "Unknown"}
+              </span>
             }
           >
-            <div className="space-y-3 text-xs">
+            <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="text-slate-500">FastAPI Server Endpoint</span>
-                <span className="font-mono text-slate-800">http://127.0.0.1:8000</span>
+                <span className="text-slate-500">API endpoint</span>
+                <span className="font-mono text-xs text-slate-800">http://127.0.0.1:8000</span>
               </div>
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="text-slate-500">API Gateway Status</span>
-                <span className="font-mono font-semibold text-emerald-700 uppercase">{health?.status ?? "OK"}</span>
+                <span className="text-slate-500">Status</span>
+                <span className="font-semibold uppercase text-emerald-700">{health?.status ?? "OK"}</span>
               </div>
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="text-slate-500">Active Serving Models</span>
-                <span className="font-mono text-slate-800">{health?.demo_models?.length ?? 0} models ready</span>
+                <span className="text-slate-500">Serving models</span>
+                <span className="text-slate-800">{health?.demo_models?.length ?? 0} ready</span>
               </div>
 
-              {/* Experiments Artifacts Status */}
               <div>
-                <p className="font-semibold text-slate-700 mb-2">Saved Experiment Artifacts on Disk</p>
-                <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                <p className="mb-2 font-medium text-slate-700">Artifacts</p>
+                <div className="grid grid-cols-2 gap-1.5 text-xs">
                   {Object.entries(health?.experiments ?? {}).map(([key, val]) => (
                     <div
                       key={key}
@@ -315,15 +282,8 @@ export default function Settings() {
           </Card>
 
           {/* SQLite Database Telemetry */}
-          <Card
-            title={
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                <HardDrive className="h-4 w-4 text-slate-500" />
-                SQLite Application Database
-              </div>
-            }
-          >
-            <div className="space-y-3 text-xs">
+          <Card title="Application database">
+            <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                 <span className="text-slate-500">Database Path</span>
                 <span className="font-mono text-[11px] text-slate-800">
@@ -346,30 +306,19 @@ export default function Settings() {
           </Card>
 
           {/* Platform Info */}
-          <Card
-            title={
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                <Info className="h-4 w-4 text-slate-500" />
-                MediFederate Platform Telemetry
-              </div>
-            }
-          >
-            <div className="space-y-2 text-xs">
+          <Card title="About">
+            <div className="space-y-2.5 text-sm">
               <div className="flex justify-between">
-                <span className="text-slate-500">Product Name:</span>
-                <strong className="text-slate-900">MediFederate AI</strong>
+                <span className="text-slate-500">Product</span>
+                <strong className="text-slate-900">MediFederate</strong>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Edition:</span>
-                <span>Healthcare Enterprise Edition</span>
+                <span className="text-slate-500">Version</span>
+                <span className="font-medium tabular-nums text-slate-800">2.4.0</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Version:</span>
-                <span className="font-mono font-semibold text-teal-700">2.4.0</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">License:</span>
-                <span>Educational / Clinical Research</span>
+                <span className="text-slate-500">Deployment</span>
+                <span>On-premises</span>
               </div>
             </div>
           </Card>

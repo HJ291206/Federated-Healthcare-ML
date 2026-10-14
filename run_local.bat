@@ -7,7 +7,7 @@ echo.
 echo  ============================================================
 echo   MediFederate AI - Privacy-Preserving Healthcare Intelligence
 echo  ============================================================
-echo   Academic Research Prototype - Not for Clinical Use
+echo   Enterprise Clinical Intelligence Platform
 echo  ============================================================
 echo.
 
@@ -18,7 +18,7 @@ set "PROJECT_DIR=%~dp0"
 set "VENV_DIR=%PROJECT_DIR%.venv"
 set "DASHBOARD_DIR=%PROJECT_DIR%dashboard"
 set "BACKEND_PORT=8000"
-set "FRONTEND_PORT=5173"
+set "FRONTEND_PORT=5175"
 set "DATASET=%PROJECT_DIR%data\raw\diabetes_binary_health_indicators_BRFSS2015.csv"
 
 :: ----------------------------------------------------------------

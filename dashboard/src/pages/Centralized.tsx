@@ -3,7 +3,7 @@ import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, X
 import type { Row } from "../api";
 import { COLORS, fmt, label, rows } from "../format";
 import { useSection } from "../hooks";
-import { Card, DataTable, Figure, SectionGate } from "../components/ui";
+import { Card, DataTable, Figure, PageHeader, SectionGate } from "../components/ui";
 
 const METRIC_COLS = [
   { key: "model", header: "Model", render: (v: unknown) => label(v) },
@@ -22,14 +22,11 @@ export default function Centralized() {
   const state = useSection("centralized");
   const [op, setOp] = useState("val_max_f1");
   return (
-    <>
-      <header>
-        <h1 className="text-xl font-semibold">Centralized model performance</h1>
-        <p className="text-sm text-slate-600">
-          Pooled training data; stratified 70/15/15 split. Thresholds are chosen on the validation split only; the test split is
-          scored once.
-        </p>
-      </header>
+    <div className="space-y-6">
+      <PageHeader
+        title="Centralized models"
+        description="Pooled training on a stratified 70/15/15 split. Thresholds are chosen on validation; the test split is scored once."
+      />
       <SectionGate state={state}>
         {(s) => {
           const results = rows(s, "results");
@@ -106,6 +103,6 @@ export default function Centralized() {
           );
         }}
       </SectionGate>
-    </>
+    </div>
   );
 }

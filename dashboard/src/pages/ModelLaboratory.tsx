@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  Activity,
-  BarChart3,
   Download,
-  FlaskConical,
-  Layers,
   RotateCcw,
 } from "lucide-react";
 import {
@@ -19,7 +15,7 @@ import {
 } from "recharts";
 import { api, type ModelComparisonData } from "../api";
 import { bytesHuman, fmt, pct } from "../format";
-import { Card, EmptyState, ErrorState, Loading, Notice } from "../components/ui";
+import { Card, EmptyState, ErrorState, Loading, PageHeader } from "../components/ui";
 
 export default function ModelLaboratory() {
   const [data, setData] = useState<ModelComparisonData | null>(null);
@@ -108,95 +104,68 @@ export default function ModelLaboratory() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <header className="flex flex-col gap-1 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <FlaskConical className="h-6 w-6 text-teal-600" />
-            Model Laboratory & Benchmarks
-          </h1>
-          <p className="text-xs text-slate-500">
-            Unified comparison across centralized baselines and federated learning architectures evaluated on identical held-out test splits.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleExportCSV}
-            className="btn-secondary text-xs px-2.5 py-1.5"
-            title="Download CSV"
-          >
-            <Download className="h-3.5 w-3.5 text-slate-600" />
-            Export CSV
-          </button>
-          <button
-            onClick={loadData}
-            className="btn-secondary text-xs px-2.5 py-1.5"
-            title="Refresh"
-          >
-            <RotateCcw className="h-3.5 w-3.5 text-slate-500" />
-          </button>
-        </div>
-      </header>
-
-      <Notice variant="info">
-        <span className="font-semibold text-slate-900">Standardized Test Evaluation:</span> All models are evaluated on the exact same held-out test set (38,052 survey records). Classification thresholds were tuned strictly on the validation set at max-F1 ({data.operating_point}).
-      </Notice>
+      <PageHeader
+        title="Model laboratory"
+        description={`Centralized and federated models scored on the same held-out test set. Thresholds were selected on validation at max F1 (${data.operating_point}).`}
+        actions={
+          <>
+            <button onClick={handleExportCSV} className="btn-secondary" title="Download CSV">
+              <Download className="h-4 w-4 text-slate-600" />
+              Export CSV
+            </button>
+            <button onClick={loadData} className="btn-secondary" title="Refresh">
+              <RotateCcw className="h-4 w-4 text-slate-500" />
+            </button>
+          </>
+        }
+      />
 
       {/* Model Spec Cards */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <div className="card">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Global Feature Dim</p>
-          <p className="mt-1 text-2xl font-bold tabular-nums text-slate-900">21 Features</p>
-          <p className="mt-0.5 text-xs text-slate-400">CDC BRFSS Indicators</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Features</p>
+          <p className="mt-2 text-2xl font-semibold tabular-nums tracking-tight text-slate-900">21</p>
+          <p className="mt-1 text-sm text-slate-500">Clinical indicators</p>
         </div>
         <div className="card">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">NN Parameters</p>
-          <p className="mt-1 text-2xl font-bold tabular-nums text-teal-700">3,521</p>
-          <p className="mt-0.5 text-xs text-slate-400">Float32 Weights</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Parameters</p>
+          <p className="mt-2 text-2xl font-semibold tabular-nums tracking-tight text-teal-800">3,521</p>
+          <p className="mt-1 text-sm text-slate-500">Neural network weights</p>
         </div>
         <div className="card">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Central Baseline AUC</p>
-          <p className="mt-1 text-2xl font-bold tabular-nums text-slate-900">0.8185</p>
-          <p className="mt-0.5 text-xs text-slate-400">Centralized MLP</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Central AUC</p>
+          <p className="mt-2 text-2xl font-semibold tabular-nums tracking-tight text-slate-900">0.8185</p>
+          <p className="mt-1 text-sm text-slate-500">Pooled MLP baseline</p>
         </div>
         <div className="card">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Fed Retention</p>
-          <p className="mt-1 text-2xl font-bold tabular-nums text-teal-700">99.89%</p>
-          <p className="mt-0.5 text-xs text-slate-400">FedAvg vs Pooled</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">FedAvg retention</p>
+          <p className="mt-2 text-2xl font-semibold tabular-nums tracking-tight text-teal-800">99.89%</p>
+          <p className="mt-1 text-sm text-slate-500">Versus pooled training</p>
         </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-2 text-xs">
-        <span className="font-bold text-slate-500 uppercase tracking-wider mr-2">Architecture Filter:</span>
-        {[
-          { key: "all", label: `All Models (${data.models.length})` },
-          { key: "centralized", label: "Centralized" },
-          { key: "fedavg", label: "FedAvg" },
-          { key: "fedprox", label: "FedProx" },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setSelectedFamily(tab.key)}
-            className={`rounded px-3 py-1 font-medium transition-colors ${
-              selectedFamily === tab.key
-                ? "bg-slate-900 text-white font-semibold"
-                : "text-slate-600 hover:bg-slate-100"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-sm text-slate-500">Architecture</span>
+        <div className="segmented">
+          {[
+            { key: "all", label: `All (${data.models.length})` },
+            { key: "centralized", label: "Centralized" },
+            { key: "fedavg", label: "FedAvg" },
+            { key: "fedprox", label: "FedProx" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setSelectedFamily(tab.key)}
+              className={selectedFamily === tab.key ? "segmented-item-active" : "segmented-item"}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Main Model Performance Table */}
-      <Card
-        title={
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-            <Layers className="h-4 w-4 text-teal-600" />
-            Comprehensive Model Evaluation (Test Split)
-          </div>
-        }
-      >
+      <Card title="Test-set evaluation">
         <div className="overflow-x-auto">
           <table className="table text-xs">
             <thead>
@@ -253,14 +222,7 @@ export default function ModelLaboratory() {
       {/* Side-by-Side Charts */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Classification Discrimination Metrics */}
-        <Card
-          title={
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-              <BarChart3 className="h-4 w-4 text-teal-600" />
-              ROC-AUC vs F1 Comparison
-            </div>
-          }
-        >
+        <Card title="ROC-AUC vs F1">
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 10, right: 10, left: -15, bottom: 45 }}>
@@ -277,14 +239,7 @@ export default function ModelLaboratory() {
         </Card>
 
         {/* Precision vs Recall Balance */}
-        <Card
-          title={
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-              <Activity className="h-4 w-4 text-teal-600" />
-              Precision vs Recall Tradeoff (Class 1)
-            </div>
-          }
-        >
+        <Card title="Precision vs recall">
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 10, right: 10, left: -15, bottom: 45 }}>
@@ -303,10 +258,7 @@ export default function ModelLaboratory() {
 
       {/* Confusion Matrix Cards */}
       <div>
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-2">
-          <Activity className="h-4 w-4 text-teal-600" />
-          Confusion Matrices (Held-Out Test Split, N=38,052)
-        </h2>
+        <h2 className="mb-3 text-sm font-semibold text-slate-800">Confusion matrices</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredModels.map((m, idx) => {
             const cm = m.confusion_matrix ?? { tp: 3240, fp: 5760, fn: 1900, tn: 27152 };

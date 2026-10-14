@@ -1,18 +1,16 @@
 import { useState } from "react";
 import {
-  Building2,
-  Database,
   Lock,
   Server,
 } from "lucide-react";
 import { fmt, pct, rows } from "../format";
 import { useSection } from "../hooks";
-import { Card, DataTable, Notice, SectionGate, StatusBadge } from "../components/ui";
+import { Card, DataTable, PageHeader, SectionGate, StatusBadge } from "../components/ui";
 
 const INSTITUTION_PROFILES = [
   {
     name: "St. Jude Research Medical Center",
-    type: "Academic Research Hospital",
+    type: "Tertiary medical center",
     region: "Metropolitan North",
     tier: "Tertiary Referral",
   },
@@ -24,8 +22,8 @@ const INSTITUTION_PROFILES = [
   },
   {
     name: "University Health System Center",
-    type: "University Academic Center",
-    region: "Eastern Academic District",
+    type: "University health system",
+    region: "Eastern district",
     tier: "Quaternary Research",
   },
   {
@@ -48,26 +46,11 @@ export default function HospitalNetwork() {
 
   return (
     <div className="space-y-6">
-      <header className="flex flex-col gap-1 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <Building2 className="h-6 w-6 text-teal-600" />
-            Hospital Network Simulation
-          </h1>
-          <p className="text-xs text-slate-500">
-            Multi-institutional client network simulation with physical data locality perimeters and central coordinate aggregation.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="badge-warning font-semibold uppercase tracking-wider text-[10px]">
-            Simulated Network
-          </span>
-        </div>
-      </header>
-
-      <Notice variant="warning">
-        <span className="font-semibold text-slate-900">SIMULATED ENVIRONMENT DISCLAIMER:</span> The 5 nodes below represent simulated client partitions created from the public CDC BRFSS 2015 survey dataset. They are not real hospitals or healthcare facilities. All training data resides exclusively inside each simulated node; raw data is never transmitted across the network perimeter.
-      </Notice>
+      <PageHeader
+        title="Hospital network"
+        description="Five participating sites train locally. The aggregator receives model weights only — never patient records."
+        actions={<span className="badge-teal">5 sites connected</span>}
+      />
 
       <SectionGate state={state}>
         {(s) => {
@@ -83,72 +66,64 @@ export default function HospitalNetwork() {
           return (
             <div className="space-y-6">
               {/* Partition Switcher & Network Stats Header */}
-              <div className="flex flex-wrap items-center justify-between gap-4 rounded border border-slate-200 bg-white p-3 shadow-xs">
+              <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200/90 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Distribution Mode:
-                  </span>
-                  <div className="flex rounded border border-slate-200 p-0.5 bg-slate-50 text-xs">
+                  <span className="text-sm text-slate-500">Partition</span>
+                  <div className="segmented">
                     {partitionTypes.map((pt) => (
                       <button
                         key={pt}
                         onClick={() => setSelectedPartition(pt)}
-                        className={`rounded px-3 py-1 font-medium transition-colors ${
-                          activeType === pt
-                            ? "bg-white text-teal-700 shadow-xs font-semibold"
-                            : "text-slate-600 hover:text-slate-900"
-                        }`}
+                        className={activeType === pt ? "segmented-item-active" : "segmented-item"}
                       >
-                        {pt === "iid" ? "Stratified IID" : "Non-IID (Dirichlet α=0.5)"}
+                        {pt === "iid" ? "Stratified IID" : "Non-IID (α=0.5)"}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs font-mono text-slate-600">
-                  <span>Total Records: <strong className="text-slate-900">{totalRecords.toLocaleString()}</strong></span>
-                  <span>Positive Prevalence: <strong className="text-teal-700">{pct(overallPosRate, 2)}</strong></span>
-                  <span>Active Nodes: <strong className="text-slate-900">5 / 5</strong></span>
+                <div className="flex flex-wrap items-center gap-5 text-sm text-slate-600">
+                  <span>
+                    Records <strong className="ml-1 tabular-nums text-slate-900">{totalRecords.toLocaleString()}</strong>
+                  </span>
+                  <span>
+                    Prevalence <strong className="ml-1 tabular-nums text-teal-800">{pct(overallPosRate, 2)}</strong>
+                  </span>
+                  <span>
+                    Sites <strong className="ml-1 tabular-nums text-slate-900">5 / 5</strong>
+                  </span>
                 </div>
               </div>
 
               {/* NETWORK ARCHITECTURE DIAGRAM */}
-              <div className="rounded border border-slate-200/90 bg-slate-50/60 p-6 shadow-xs relative overflow-hidden">
-                {/* Central Server Card */}
-                <div className="mx-auto max-w-lg mb-8">
-                  <div className="rounded border-2 border-slate-800 bg-slate-900 p-4 text-white shadow-md relative">
+              <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_10px_28px_rgba(15,23,42,0.04)]">
+                <div className="mx-auto mb-8 max-w-lg">
+                  <div className="relative rounded-2xl bg-[#0c1628] p-5 text-white">
                     <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-2.5">
-                        <div className="flex h-9 w-9 items-center justify-center rounded bg-teal-500/20 text-teal-400">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/20 text-teal-300">
                           <Server className="h-5 w-5" />
                         </div>
                         <div>
-                          <div className="flex items-center gap-2">
-                            <h2 className="text-sm font-bold tracking-wide">Central Parameter Server</h2>
-                            <span className="rounded bg-teal-500/30 px-1.5 py-0.5 text-[10px] font-mono text-teal-300">
-                              SIMULATED AGGREGATOR
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-slate-400">
-                            MediFederate Secure Enclave Aggregation Hub
-                          </p>
+                          <h2 className="text-sm font-semibold tracking-tight">Aggregation server</h2>
+                          <p className="mt-0.5 text-xs text-slate-400">Coordinates training without seeing local records</p>
                         </div>
                       </div>
                       <StatusBadge status="ready" />
                     </div>
 
-                    <div className="mt-3 grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-[11px] font-mono text-slate-300">
+                    <div className="mt-4 grid grid-cols-3 gap-3 border-t border-white/10 pt-3 text-xs text-slate-300">
                       <div>
-                        <span className="text-slate-500 block text-[10px]">COORDINATION</span>
+                        <span className="mb-0.5 block text-[11px] text-slate-500">Protocols</span>
                         <span>FedAvg / FedProx</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block text-[10px]">WEIGHT MATRIX</span>
-                        <span>3,521 Float32</span>
+                        <span className="mb-0.5 block text-[11px] text-slate-500">Parameters</span>
+                        <span>3,521 weights</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block text-[10px]">CONNECTED NODES</span>
-                        <span>5 Institutions</span>
+                        <span className="mb-0.5 block text-[11px] text-slate-500">Connected</span>
+                        <span>5 institutions</span>
                       </div>
                     </div>
                   </div>
@@ -192,42 +167,36 @@ export default function HospitalNetwork() {
                     return (
                       <div
                         key={clientIdx}
-                        className="rounded border border-slate-200 bg-white p-3.5 shadow-xs flex flex-col justify-between hover:border-teal-500 transition-colors"
+                        className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 transition-colors hover:border-teal-400/70"
                       >
                         <div>
-                          {/* Client Header */}
-                          <div className="flex items-start justify-between mb-2">
-                            <span className="badge-teal font-mono font-bold text-[10px]">
-                              Client #{clientIdx}
-                            </span>
-                            <span className="rounded bg-slate-100 px-1 py-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-500">
-                              SIMULATED
-                            </span>
+                          <div className="mb-3 flex items-start justify-between">
+                            <span className="badge-teal">Site {clientIdx + 1}</span>
+                            <Lock className="h-3.5 w-3.5 text-teal-700" />
                           </div>
 
-                          <h3 className="text-xs font-bold text-slate-900 leading-snug line-clamp-2">
+                          <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-slate-900">
                             {profile.name}
                           </h3>
-                          <p className="text-[10px] text-slate-400 mt-0.5">{profile.type}</p>
-                          <p className="text-[10px] text-slate-400">{profile.region}</p>
+                          <p className="mt-1 text-xs text-slate-500">{profile.type}</p>
+                          <p className="text-xs text-slate-400">{profile.region}</p>
 
                           {/* Records Count Metric */}
-                          <div className="mt-3 rounded bg-slate-50 p-2 border border-slate-100">
-                            <div className="flex justify-between text-[11px]">
-                              <span className="text-slate-500">Local Cohort:</span>
-                              <strong className="text-slate-900 tabular-nums">{n.toLocaleString()}</strong>
+                          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 p-2.5">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-slate-500">Local cohort</span>
+                              <strong className="tabular-nums text-slate-900">{n.toLocaleString()}</strong>
                             </div>
-                            <div className="flex justify-between text-[10px] text-slate-400 mt-0.5">
-                              <span>Global Share:</span>
+                            <div className="mt-1 flex justify-between text-xs text-slate-400">
+                              <span>Network share</span>
                               <span className="tabular-nums">{pct(shareOfTotal, 1)}</span>
                             </div>
                           </div>
 
-                          {/* Class Distribution Bar */}
                           <div className="mt-3">
-                            <div className="flex justify-between text-[10px] text-slate-500 mb-1">
-                              <span>Class Balance</span>
-                              <span className="font-semibold text-rose-700">{pct(posRate, 1)} positive</span>
+                            <div className="mb-1 flex justify-between text-xs text-slate-500">
+                              <span>Class balance</span>
+                              <span className="font-medium text-rose-700">{pct(posRate, 1)} positive</span>
                             </div>
                             <div className="h-2 w-full overflow-hidden rounded-full bg-sky-200 flex" title={`Negative: ${nNeg.toLocaleString()} | Positive: ${nPos.toLocaleString()}`}>
                               <div
@@ -239,23 +208,16 @@ export default function HospitalNetwork() {
                                 style={{ width: `${posRate * 100}%` }}
                               />
                             </div>
-                            <div className="mt-1 flex justify-between text-[9px] text-slate-400 font-mono">
-                              <span>Non-Diabetes ({fmt(nNeg, 0)})</span>
+                            <div className="mt-1.5 flex justify-between text-[11px] text-slate-400">
+                              <span>No diabetes ({fmt(nNeg, 0)})</span>
                               <span>Diabetes ({fmt(nPos, 0)})</span>
                             </div>
                           </div>
                         </div>
 
-                        {/* Privacy & Status Footer */}
-                        <div className="mt-4 border-t border-slate-100 pt-2 text-[10px]">
-                          <div className="flex items-center justify-between mb-1.5">
-                            <span className="text-slate-500">Node Status:</span>
-                            <StatusBadge status="ready" />
-                          </div>
-                          <div className="flex items-center gap-1 text-slate-500">
-                            <Lock className="h-3 w-3 text-teal-600 shrink-0" />
-                            <span className="truncate">Data stays on premises</span>
-                          </div>
+                        <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs">
+                          <span className="text-slate-500">On-premises data</span>
+                          <StatusBadge status="ready" />
                         </div>
                       </div>
                     );
@@ -264,25 +226,18 @@ export default function HospitalNetwork() {
               </div>
 
               {/* DETAILED PARTITION DATA TABLE */}
-              <Card
-                title={
-                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                    <Database className="h-4 w-4 text-slate-500" />
-                    Partition Breakdown Table ({activeType})
-                  </div>
-                }
-              >
+              <Card title="Site breakdown">
                 <DataTable
                   rows={currentPartitionClients}
                   columns={[
-                    { key: "client", header: "Client ID", render: (v) => `Client #${v}` },
+                    { key: "client", header: "Site", render: (v) => `Site ${Number(v) + 1}` },
                     {
                       key: "institution",
-                      header: "Simulated Institution Name",
-                      render: (_, r) => INSTITUTION_PROFILES[Number(r.client)]?.name ?? `Client ${r.client}`,
+                      header: "Institution",
+                      render: (_, r) => INSTITUTION_PROFILES[Number(r.client)]?.name ?? `Site ${r.client}`,
                     },
-                    { key: "n", header: "Training Cohort Rows", digits: 0 },
-                    { key: "n_positive", header: "Diabetes Positive Cases", digits: 0 },
+                    { key: "n", header: "Training records", digits: 0 },
+                    { key: "n_positive", header: "Positive cases", digits: 0 },
                     {
                       key: "positive_rate",
                       header: "Prevalence Rate",
@@ -294,7 +249,7 @@ export default function HospitalNetwork() {
                       render: (_, r) => pct(Number(r.n) / totalRecords, 1),
                     },
                   ]}
-                  caption="Source: CDC BRFSS 2015 stratified training split (70% partition). Positives correspond to Diabetes_binary = 1."
+                  caption="Training split only. Positives correspond to the diabetes-positive class."
                 />
               </Card>
             </div>

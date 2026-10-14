@@ -2,19 +2,16 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 import type { Row } from "../api";
 import { COLORS, fmt, label, pct, rows } from "../format";
 import { useSection } from "../hooks";
-import { Card, DataTable, Disclaimers, Figure, SectionGate } from "../components/ui";
+import { Card, DataTable, Disclaimers, Figure, PageHeader, SectionGate } from "../components/ui";
 
 export default function Partitions() {
   const state = useSection("partitions");
   return (
-    <>
-      <header>
-        <h1 className="text-xl font-semibold">IID versus non-IID client distributions</h1>
-        <p className="text-sm text-slate-600">
-          How training rows and positive labels are spread over the 5 simulated clients under stratified-IID and Dirichlet label-skew
-          partitioning. Only per-client counts are shown; no records.
-        </p>
-      </header>
+    <div className="space-y-6">
+      <PageHeader
+        title="Site partitions"
+        description="How training rows and positive labels are spread across five sites under IID and Dirichlet partitioning."
+      />
       <SectionGate state={state}>
         {(s) => {
           const parts = rows(s, "partitions").filter((r) => r.split === "train");
@@ -98,6 +95,6 @@ export default function Partitions() {
           );
         }}
       </SectionGate>
-    </>
+    </div>
   );
 }

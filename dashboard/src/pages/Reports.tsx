@@ -7,12 +7,11 @@ import {
   FileCode,
   FileSpreadsheet,
   FileText,
-  Plus,
   RotateCcw,
 } from "lucide-react";
 import { api, type ReportItem } from "../api";
 import { bytesHuman } from "../format";
-import { Card, EmptyState, ErrorState, Loading, Notice } from "../components/ui";
+import { Card, EmptyState, ErrorState, Loading, PageHeader } from "../components/ui";
 
 export default function Reports() {
   const [reports, setReports] = useState<ReportItem[]>([]);
@@ -103,8 +102,8 @@ export default function Reports() {
     },
     {
       kind: "full_research_pdf",
-      title: "Full Research Report (PDF)",
-      desc: "Executive summary with methodology & disclaimers",
+      title: "Full platform report (PDF)",
+      desc: "Executive summary, methodology, and results",
       icon: <FileText className="h-4 w-4 text-rose-600" />,
     },
   ];
@@ -112,52 +111,34 @@ export default function Reports() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <header className="flex flex-col gap-1 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <FileText className="h-6 w-6 text-teal-600" />
-            Healthcare Intelligence Reports
-          </h1>
-          <p className="text-xs text-slate-500">
-            Generate audit-ready clinical research summaries, statistical comparison exports, and heterogeneity benchmarks.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button onClick={loadReports} className="btn-secondary text-xs px-2.5 py-1.5" title="Refresh">
-            <RotateCcw className="h-3.5 w-3.5 text-slate-500" />
+      <PageHeader
+        title="Reports"
+        description="Export aggregated comparisons. Patient-level records are never included."
+        actions={
+          <button onClick={loadReports} className="btn-secondary" title="Refresh">
+            <RotateCcw className="h-4 w-4 text-slate-500" />
             Refresh
           </button>
-        </div>
-      </header>
+        }
+      />
 
-      <Notice variant="info">
-        <span className="font-semibold text-slate-900">Research & Compliance Notice:</span> Reports generated here compile strictly aggregated statistical outputs (ROC-AUC, F1, parameter communication volume) from CDC BRFSS 2015 experiments. Individual patient records are never included in exported documents.
-      </Notice>
-
-      {/* Report Generation Actions Grid */}
       <div>
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-2">
-          <Plus className="h-4 w-4 text-teal-600" />
-          Generate New Report
-        </h2>
+        <h2 className="mb-3 text-sm font-semibold text-slate-800">Generate</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {REPORT_TYPES.map((rt) => (
             <div
               key={rt.kind}
-              className="card flex flex-col justify-between hover:border-teal-500 transition-colors cursor-pointer"
+              className="card flex cursor-pointer flex-col justify-between transition-colors hover:border-teal-400/80"
               onClick={() => handleGenerate(rt.kind)}
             >
               <div>
-                <div className="mb-2 flex h-8 w-8 items-center justify-center rounded bg-slate-100">
+                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50">
                   {rt.icon}
                 </div>
-                <h3 className="text-xs font-bold text-slate-900 leading-snug">{rt.title}</h3>
-                <p className="mt-1 text-[11px] text-slate-500 leading-relaxed">{rt.desc}</p>
+                <h3 className="text-sm font-semibold leading-snug text-slate-900">{rt.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{rt.desc}</p>
               </div>
-              <button
-                disabled={generating === rt.kind}
-                className="btn-teal mt-3 w-full text-xs py-1"
-              >
+              <button disabled={generating === rt.kind} className="btn-teal mt-4 w-full">
                 {generating === rt.kind ? "Generating…" : "Generate"}
               </button>
             </div>
@@ -172,8 +153,8 @@ export default function Reports() {
           <Card
             title={
               <div className="flex items-center justify-between w-full">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Generated Documents ({reports.length})
+                <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+                  Generated ({reports.length})
                 </span>
               </div>
             }
@@ -267,8 +248,8 @@ export default function Reports() {
             </Card>
           ) : (
             <EmptyState
-              title="No Report Selected"
-              message="Choose a report from the list on the left to preview its contents and download artifacts."
+              title="No report selected"
+              message="Choose a document from the list to preview and download."
             />
           )}
         </div>

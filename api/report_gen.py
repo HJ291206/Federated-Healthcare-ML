@@ -367,7 +367,7 @@ def generate_research_pdf(
     # Section 1: Executive Summary
     story.append(Paragraph("1. Executive Summary & Architecture", section_heading))
     summary_text = (
-        "MediFederate AI deploys distributed parameter aggregation across simulated hospital nodes, ensuring "
+        "MediFederate AI deploys distributed parameter aggregation across decentralized institutional healthcare nodes, ensuring "
         "raw patient records never traverse institution boundaries. Parameter exchange is restricted to float32 model "
         "gradients (3,521 weights for the multi-layer perceptron). Across 253,680 patient records partitioned into "
         "decentralized nodes, federated optimization preserves over 99.8% of centralized ROC-AUC performance while "

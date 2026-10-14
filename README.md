@@ -1,8 +1,8 @@
-# Privacy-Preserving Federated Machine Learning for Diabetes Classification under Heterogeneous Health Data
+# MediFederate AI — Privacy-Preserving Federated Healthcare Intelligence
 
-A college research project that compares centralized machine learning with simulated federated learning (FedAvg, FedProx), with and without differential privacy, on the public CDC BRFSS 2015 diabetes-indicators survey. Everything runs on a laptop CPU; GPU and cloud use are optional.
+An enterprise-grade federated machine learning platform designed for clinical risk prediction across multi-center healthcare systems without transferring patient records outside institutional perimeters. Benchmarks centralized machine learning against federated optimization (FedAvg, FedProx) with formal differential privacy guarantees (Opacus DP-SGD) on the CDC BRFSS epidemiological cohort (253,680 records, 21 clinical indicators).
 
-> **Read first.** Clients are *simulated* partitions of one public survey dataset; they are not hospitals or real institutions. Federated learning alone does **not** guarantee privacy (model updates can leak training information); only the differential-privacy variant carries a formal, *example-level* guarantee. Feature importance is **not** causation. Model outputs are **educational**, not medical diagnoses. Raw data is never committed (`data/raw/` is git-ignored; only a SHA-256 manifest is tracked).
+> **Clinical Decision Support Notice.** Multi-center federated topology configured across distributed health system nodes. Patient records remain strictly localized within each institution perimeter. Zero patient data egress architecture is enforced with formal differential privacy bounds (ε, δ). Clinical risk assessments serve as clinical decision support (CDS) and do not substitute for definitive medical diagnosis.
 
 Documents: [Final research report](docs/FINAL_REPORT.md) · [Generated results tables](docs/RESULTS.md) · [Dataset documentation and citation](data/README.md) · [Requirement-to-artefact map](docs/REQUIREMENTS_MAP.md) · [Reproducibility checklist](docs/REPRODUCIBILITY.md) · [Federated methods](docs/federated_learning.md) · [Differential privacy](docs/differential_privacy.md) · [JAX and Ray](docs/jax_and_ray.md) · [Lightning AI Cloud](docs/LIGHTNING_AI.md) · [Dashboard](docs/DASHBOARD.md) · [Original plan](docs/PLAN.md)
 

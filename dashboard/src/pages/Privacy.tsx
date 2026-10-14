@@ -1,18 +1,16 @@
 import { CartesianGrid, Legend, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis, ZAxis } from "recharts";
 import { COLORS, fmt, label, num, rows } from "../format";
 import { useSection } from "../hooks";
-import { Card, DataTable, Disclaimers, Figure, Notice, SectionGate } from "../components/ui";
+import { Card, DataTable, Figure, Notice, PageHeader, SectionGate } from "../components/ui";
 
 export default function Privacy() {
   const state = useSection("privacy");
   return (
-    <>
-      <header>
-        <h1 className="text-xl font-semibold">Differential privacy and privacy–utility comparison</h1>
-        <p className="text-sm text-slate-600">
-          Example-level DP-SGD (Opacus) inside each client's local training, compared with the non-private FedAvg/FedProx runs.
-        </p>
-      </header>
+    <div className="space-y-6">
+      <PageHeader
+        title="Privacy & security"
+        description="Compare example-level DP-SGD with non-private FedAvg and FedProx runs on the same evaluation protocol."
+      />
       <SectionGate state={state}>
         {(s) => {
           const res = rows(s, "results").filter((r) => r.operating_point === "val_max_f1");
@@ -28,14 +26,12 @@ export default function Privacy() {
           const cfg = (s.config ?? {}) as Record<string, unknown>;
           return (
             <>
-              <Disclaimers items={s.disclaimers} keys={["privacy"]} />
-              <Notice>
+              <Notice variant="info">
                 <span className="font-medium">Privacy unit:</span> {String(s.privacy_unit ?? "one training example of one client (example-level DP)")}.
-                This is <span className="font-medium">not</span> client-level DP and does not hide which client participated. ε is the maximum over clients
-                at δ = {fmt(cfg.delta, 6)}; clipping norm C = {fmt(cfg.max_grad_norm, 2)}; accountant: {String(cfg.accountant ?? "–")}.
+                This is not client-level DP. ε is the maximum over clients at δ = {fmt(cfg.delta, 6)}; clip C = {fmt(cfg.max_grad_norm, 2)}; accountant: {String(cfg.accountant ?? "–")}.
               </Notice>
-              <div className="grid gap-4 lg:grid-cols-2">
-                <Card title="Privacy–utility: test ROC-AUC vs ε (lower ε = stronger guarantee)">
+              <div className="grid gap-6 lg:grid-cols-2">
+                <Card title="Privacy–utility" subtitle="Test ROC-AUC versus ε. Lower ε is a stronger guarantee.">
                   <ResponsiveContainer width="100%" height={300}>
                     <ScatterChart margin={{ bottom: 20 }}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -59,12 +55,12 @@ export default function Privacy() {
                       ))}
                     </ScatterChart>
                   </ResponsiveContainer>
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-2 text-sm text-slate-500">
                     Non-private reference (no formal guarantee):{" "}
                     {nonpriv.map((r) => `${label(r.partition)} ${label(r.algorithm)} ${fmt(r.roc_auc)}`).join("; ") || "–"}
                   </p>
                 </Card>
-                <Card title="Private vs non-private runs (test split, val_max_f1 threshold)">
+                <Card title="Private vs non-private">
                   <DataTable
                     rows={res}
                     columns={[
@@ -81,7 +77,7 @@ export default function Privacy() {
                   />
                 </Card>
               </div>
-              <Card title="Privacy accounting per client">
+              <Card title="Per-site privacy accounting">
                 <DataTable
                   rows={rows(s, "accounting")}
                   columns={[
@@ -98,7 +94,7 @@ export default function Privacy() {
                   caption="ε accumulates across all rounds for each client (RDP accountant, Poisson sampling)."
                 />
               </Card>
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className="grid gap-6 lg:grid-cols-2">
                 {(s.figures ?? []).map((f) => (
                   <Figure key={f} rel={f} alt={f} />
                 ))}
@@ -107,6 +103,6 @@ export default function Privacy() {
           );
         }}
       </SectionGate>
-    </>
+    </div>
   );
 }

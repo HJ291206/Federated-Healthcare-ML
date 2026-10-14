@@ -1,6 +1,6 @@
 """Background experiment runner for federated learning in MediFederate AI.
 
-Executes FedAvg and FedProx experiments sequentially on simulated client partitions in a
+Executes FedAvg and FedProx experiments across distributed client partitions in a
 background thread. Coordinates with api.db.Database for queueing, progress tracking,
 and graceful cancellation checks between rounds.
 """

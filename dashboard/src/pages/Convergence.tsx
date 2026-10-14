@@ -3,7 +3,7 @@ import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, X
 import type { Row } from "../api";
 import { COLORS, bytesHuman, fmt, label, num, rows } from "../format";
 import { useSection } from "../hooks";
-import { Card, DataTable, SectionGate } from "../components/ui";
+import { Card, DataTable, PageHeader, SectionGate } from "../components/ui";
 
 /** Mean of a metric per (series, round) across seeds. */
 function series(hist: Row[], partition: string, metric: string) {
@@ -25,14 +25,11 @@ export default function Convergence() {
   const state = useSection("convergence");
   const [partition, setPartition] = useState<string | null>(null);
   return (
-    <>
-      <header>
-        <h1 className="text-xl font-semibold">Convergence and communication cost</h1>
-        <p className="text-sm text-slate-600">
-          Global-model validation ROC-AUC and mean client loss per communication round (averaged over seeds), with the float32 payload
-          exchanged per round.
-        </p>
-      </header>
+    <div className="space-y-6">
+      <PageHeader
+        title="Convergence"
+        description="Validation ROC-AUC and mean client loss per round, with the parameter payload exchanged."
+      />
       <SectionGate state={state}>
         {(s) => {
           const hist = rows(s, "round_history");
@@ -132,6 +129,6 @@ export default function Convergence() {
           );
         }}
       </SectionGate>
-    </>
+    </div>
   );
 }

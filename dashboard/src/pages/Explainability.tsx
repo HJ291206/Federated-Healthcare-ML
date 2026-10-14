@@ -3,21 +3,18 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Toolti
 import type { Row } from "../api";
 import { COLORS, fmt, label, num, rows } from "../format";
 import { useSection } from "../hooks";
-import { Card, DataTable, Disclaimers, Figure, SectionGate } from "../components/ui";
+import { Card, DataTable, Figure, PageHeader, SectionGate } from "../components/ui";
 
 export default function Explainability() {
   const state = useSection("explainability");
   const [model, setModel] = useState<string | null>(null);
   const [caseName, setCaseName] = useState<string | null>(null);
   return (
-    <>
-      <header>
-        <h1 className="text-xl font-semibold">SHAP explainability</h1>
-        <p className="text-sm text-slate-600">
-          Shapley-value attributions in probability units for the centralized models and the federated global models, on a random
-          test subset.
-        </p>
-      </header>
+    <div className="space-y-6">
+      <PageHeader
+        title="Explainability"
+        description="SHAP attributions in probability units for centralized and federated models on a held-out sample."
+      />
       <SectionGate state={state}>
         {(s) => {
           const imp = rows(s, "global_importance");
@@ -42,8 +39,7 @@ export default function Explainability() {
           const method = (s.method ?? {}) as Record<string, unknown>;
           return (
             <>
-              <Disclaimers items={s.disclaimers} keys={["causation"]} />
-              <Card title="Global feature importance: mean |SHAP| (change in predicted probability)">
+              <Card title="Global feature importance" subtitle="Mean absolute SHAP — change in predicted probability.">
                 <ResponsiveContainer width="100%" height={420}>
                   <BarChart data={grouped} margin={{ bottom: 80 }}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -56,13 +52,15 @@ export default function Explainability() {
                     ))}
                   </BarChart>
                 </ResponsiveContainer>
-                <p className="mt-1 text-xs text-slate-500">
-                  {method.n_explained ? `${String(method.n_explained)} explained test rows, ${String(method.n_background)} background rows, SHAP ${String(method.shap_version)}.` : ""}{" "}
-                  Importance describes the fitted model, not causal effects.
-                </p>
+                {method.n_explained ? (
+                  <p className="mt-2 text-sm text-slate-500">
+                    {String(method.n_explained)} explained rows, {String(method.n_background)} background rows
+                    {method.shap_version ? `, SHAP ${String(method.shap_version)}` : ""}.
+                  </p>
+                ) : null}
               </Card>
               {individual.length > 0 && (
-                <Card title="Individual prediction explanation">
+                <Card title="Individual explanation">
                   <div className="mb-2 flex flex-wrap items-center gap-3 text-sm">
                     <label className="flex items-center gap-1">
                       Model
@@ -106,14 +104,13 @@ export default function Explainability() {
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Red raises, blue lowers the predicted probability for this one survey row. Attribution of a single prediction, not a causal
-                    statement and not medical advice.
+                  <p className="mt-2 text-sm text-slate-500">
+                    Red raises predicted probability; blue lowers it for this record.
                   </p>
                 </Card>
               )}
-              <div className="grid gap-4 lg:grid-cols-2">
-                <Card title="Rank agreement between models (Spearman ρ of mean |SHAP|)">
+              <div className="grid gap-6 lg:grid-cols-2">
+                <Card title="Rank agreement">
                   <DataTable
                     rows={rows(s, "rank_agreement")}
                     columns={[
@@ -123,7 +120,7 @@ export default function Explainability() {
                     ]}
                   />
                 </Card>
-                <Card title="Top features per model (rank by mean |SHAP|)">
+                <Card title="Top features by model">
                   <DataTable
                     rows={imp.filter((r) => Number(r.rank) <= 5).sort((a, b) => String(a.model).localeCompare(String(b.model)) || Number(a.rank) - Number(b.rank))}
                     columns={[
@@ -136,7 +133,7 @@ export default function Explainability() {
                   />
                 </Card>
               </div>
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className="grid gap-6 lg:grid-cols-2">
                 {(s.figures ?? [])
                   .filter((f) => f.includes("global"))
                   .map((f) => (
@@ -147,6 +144,6 @@ export default function Explainability() {
           );
         }}
       </SectionGate>
-    </>
+    </div>
   );
 }

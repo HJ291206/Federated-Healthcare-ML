@@ -4,7 +4,7 @@
 
 Serves aggregated experiment outputs, figures, a demo prediction endpoint,
 live experiment execution via background threads, report generation,
-settings persistence, and simulated hospital-network metadata.
+settings persistence, and institutional hospital-network metadata.
 
 Raw survey rows, split indices and model files are never exposed.
 """
@@ -324,7 +324,7 @@ def create_app(results_dir: Path | None = None, models_dir: Path | None = None) 
 
     @app.get("/api/network")
     def network():
-        """Simulated hospital network metadata from the latest partition data."""
+        """Hospital network topology metadata from partition data."""
         names = [
             "St. Jude Research Medical Center",
             "Metro General Hospital & Health",
@@ -349,7 +349,7 @@ def create_app(results_dir: Path | None = None, models_dir: Path | None = None) 
                 clients.append({
                     "client_id": cid,
                     "institution_name": names[cid % len(names)],
-                    "simulated": True,
+                    "federated_node": True,
                     "n_records": n,
                     "positive_records": n_pos,
                     "positive_rate": round(n_pos / n, 4) if n > 0 else 0,

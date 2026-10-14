@@ -2,7 +2,7 @@ import { Bar, BarChart, CartesianGrid, Cell, ErrorBar, ResponsiveContainer, Tool
 import type { Row } from "../api";
 import { bytesHuman, fmt, label, num, rows } from "../format";
 import { useSection } from "../hooks";
-import { Card, DataTable, Disclaimers, Figure, Notice, SectionGate } from "../components/ui";
+import { Card, DataTable, Disclaimers, Figure, Notice, PageHeader, SectionGate } from "../components/ui";
 
 const FAMILY_COLOR: Record<string, string> = { centralized: "#0369a1", local_only: "#64748b", fedavg: "#ea580c", fedprox: "#15803d", dp: "#7c3aed" };
 
@@ -16,14 +16,11 @@ const pm = (r: Row, m: string) => {
 export default function Federated() {
   const state = useSection("federated");
   return (
-    <>
-      <header>
-        <h1 className="text-xl font-semibold">Federated-learning comparison</h1>
-        <p className="text-sm text-slate-600">
-          Centralized MLP vs local-only clients vs FedAvg vs FedProx on the held-out test split. Mean ± std over seeds where
-          more than one seed was run.
-        </p>
-      </header>
+    <div className="space-y-6">
+      <PageHeader
+        title="Federated comparison"
+        description="Centralized MLP versus local-only clients, FedAvg, and FedProx on the held-out test split."
+      />
       <SectionGate state={state}>
         {(s) => {
           const final = rows(s, "final_comparison").filter((r) => r.family !== "dp");
@@ -145,6 +142,6 @@ export default function Federated() {
           );
         }}
       </SectionGate>
-    </>
+    </div>
   );
 }

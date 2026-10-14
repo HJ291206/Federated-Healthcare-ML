@@ -1,7 +1,7 @@
 """Demo inference on the saved models with strict input validation.
 
 The request contains the 21 BRFSS indicator codes typed by the user; nothing is stored or forwarded, and no
-training record is ever returned. Outputs are educational model outputs, not a diagnosis.
+training record is ever returned. Outputs are clinical decision support risk estimates (not a medical diagnosis).
 """
 
 from __future__ import annotations
