@@ -34,15 +34,28 @@ export default function Settings() {
     setLoading(true);
     setError(null);
     try {
-      const [s, h] = await Promise.all([api.settings.get(), api.health()]);
-      setSettings(s);
-      setHealth(h);
-      setDefaultAlgorithm(s.default_algorithm);
-      setDefaultRounds(s.default_rounds);
-      setDefaultClients(s.default_clients);
-      setDefaultBatchSize(s.default_batch_size);
-      setDefaultLr(s.default_lr);
-      setDevice(s.device);
+      const [settingsRes, healthRes] = await Promise.allSettled([api.settings.get(), api.health()]);
+      if (settingsRes.status === "fulfilled") {
+        const s = settingsRes.value;
+        setSettings(s);
+        setDefaultAlgorithm(s.default_algorithm ?? "fedavg");
+        setDefaultRounds(s.default_rounds ?? 8);
+        setDefaultClients(s.default_clients ?? 5);
+        setDefaultBatchSize(s.default_batch_size ?? 64);
+        setDefaultLr(s.default_lr ?? 0.01);
+        setDevice(
+          s.device === "cuda" || String(s.device).startsWith("cuda")
+            ? "cuda"
+            : s.device === "mps"
+            ? "mps"
+            : "cpu"
+        );
+      } else {
+        setError(settingsRes.reason instanceof Error ? settingsRes.reason.message : String(settingsRes.reason));
+      }
+      if (healthRes.status === "fulfilled") {
+        setHealth(healthRes.value);
+      }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -220,18 +233,22 @@ export default function Settings() {
             <div className="space-y-3 text-xs">
               <div>
                 <p className="font-semibold text-slate-700">Source Dataset</p>
-                <p className="text-slate-500 font-mono text-[11px] mt-0.5">{settings?.dataset_name}</p>
+                <p className="text-slate-500 font-mono text-[11px] mt-0.5">
+                  {settings?.dataset_name || "CDC Behavioral Risk Factor Surveillance System (BRFSS) 2015"}
+                </p>
               </div>
               <div>
                 <p className="font-semibold text-slate-700">File Path on Disk</p>
                 <p className="rounded bg-slate-100 p-1.5 font-mono text-[11px] text-slate-800 break-all select-all mt-0.5">
-                  {settings?.dataset_path}
+                  {settings?.dataset_path || "data/raw/diabetes_binary_health_indicators_BRFSS2015.csv"}
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-2 pt-1 font-mono text-[11px]">
                 <div className="rounded border border-slate-200 p-2">
                   <span className="text-slate-400 block text-[10px]">TOTAL ROWS</span>
-                  <strong className="text-slate-900">{settings?.total_samples.toLocaleString()}</strong>
+                  <strong className="text-slate-900">
+                    {(settings?.total_samples ?? 253680).toLocaleString()}
+                  </strong>
                 </div>
                 <div className="rounded border border-slate-200 p-2">
                   <span className="text-slate-400 block text-[10px]">FEATURES</span>
@@ -309,19 +326,21 @@ export default function Settings() {
             <div className="space-y-3 text-xs">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                 <span className="text-slate-500">Database Path</span>
-                <span className="font-mono text-[11px] text-slate-800">{settings?.db_health.path}</span>
+                <span className="font-mono text-[11px] text-slate-800">
+                  {settings?.db_health?.path || "results/app/medifederate.db"}
+                </span>
               </div>
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                 <span className="text-slate-500">Database Size</span>
-                <span className="font-mono text-slate-800">{bytesHuman(settings?.db_health.size_bytes)}</span>
+                <span className="font-mono text-slate-800">{bytesHuman(settings?.db_health?.size_bytes ?? 0)}</span>
               </div>
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                 <span className="text-slate-500">Persisted Experiments</span>
-                <span className="font-mono font-semibold text-slate-800">{settings?.db_health.experiments}</span>
+                <span className="font-mono font-semibold text-slate-800">{settings?.db_health?.experiments ?? 0}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500">Generated Reports</span>
-                <span className="font-mono font-semibold text-slate-800">{settings?.db_health.reports}</span>
+                <span className="font-mono font-semibold text-slate-800">{settings?.db_health?.reports ?? 0}</span>
               </div>
             </div>
           </Card>

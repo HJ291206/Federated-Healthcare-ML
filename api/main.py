@@ -273,8 +273,11 @@ def create_app(results_dir: Path | None = None, models_dir: Path | None = None) 
         devices = ["cpu"]
         if cuda_available:
             devices.append(f"cuda ({torch.cuda.get_device_name(0)})")
+        running = db.running_experiment()
         return {
             "dataset_path": saved.get("dataset_path", str(ROOT / "data" / "raw" / "diabetes_binary_health_indicators_BRFSS2015.csv")),
+            "dataset_name": "CDC Behavioral Risk Factor Surveillance System (BRFSS) 2015",
+            "total_samples": 253680,
             "default_algorithm": saved.get("default_algorithm", "fedavg"),
             "default_rounds": saved.get("default_rounds", 8),
             "default_clients": saved.get("default_clients", 5),
@@ -293,6 +296,7 @@ def create_app(results_dir: Path | None = None, models_dir: Path | None = None) 
                 "cpu_count": os.cpu_count(),
                 "cuda_available": cuda_available,
                 "backend_status": "online",
+                "active_experiments": 1 if running else 0,
             },
         }
 
